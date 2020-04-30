@@ -123,7 +123,7 @@ def main():
                 conf = cursor.fetchall()[0][0]
                 cursor.execute(insert_query, dict(init=row[3], name=init_to_name(row[3]), conference=conf,
                 division=div))
-                conn.commit()
+        conn.commit()
             else:
                 break
     print("Finished addding teams")
@@ -145,7 +145,7 @@ def main():
                 cursor.execute(get_away, dict(name=row[3]))
                 away = cursor.fetchall()[0][0]
                 cursor.execute(insert_query, dict(home=home, away=away, hscore=row[2], ascore=row[4], date=date))
-                conn.commit()
+        conn.commit()
     # Load data into Weather table
 
     # Load data into Standings table
