@@ -19,7 +19,8 @@ CREATE TABLE Division
 CREATE TABLE Team
 (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
+  initial VARCHAR(3) UNIQUE,
+  name VARCHAR(127) UNIQUE,
   conference INTEGER REFERENCES Conference(id),
   division INTEGER REFERENCES Division(id)
 );
