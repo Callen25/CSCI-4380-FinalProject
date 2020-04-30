@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import psycopg2
 
 connection_string = "host='localhost' dbname='dbms_final_project' user='dbms_project_user' password='dbms_password'"
@@ -11,69 +12,69 @@ cursor = conn.cursor()
 Takes the initals of a team and returns its associated name
 """
 def init_to_name(initial):
-    if initial is 'BUF':
+    if initial == 'BUF':
         return 'Buffalo Bills'
-    if initial is 'MIA':
+    if initial == 'MIA':
         return 'Miami Dolphins'
-    if initial is 'NE':
+    if initial == 'NE':
         return 'New England Patriots'
-    if initial is 'NYJ':
-        return 'New York Giants'
-    if initial is 'BAL':
+    if initial == 'NYJ':
+        return 'New York Jets'
+    if initial == 'BAL':
         return 'Baltimore Ravens'
-    if initial is 'CIN':
+    if initial == 'CIN':
         return 'Cincinnati Bengals'
-    if initial is 'CLE':
+    if initial == 'CLE':
         return 'Cleveland Browns'
-    if initial is 'PIT':
+    if initial == 'PIT':
         return 'Pittsburgh Steelers'
-    if initial is 'HOU':
+    if initial == 'HOU':
         return 'Houston Texans'
-    if initial is 'IND':
+    if initial == 'IND':
         return 'Indianapolis Colts'
-    if initial is 'JAX':
+    if initial == 'JAX':
         return 'Jacksonville Jaguars'
-    if initial is 'TEN':
+    if initial == 'TEN':
         return 'Tennessee Titans'
-    if initial is 'DEN':
+    if initial == 'DEN':
         return 'Denver Broncos'
-    if initial is 'KC':
+    if initial == 'KC':
         return 'Kansas City Chiefs'
-    if initial is 'OAK':
+    if initial == 'OAK':
         return 'Oakland Raiders'
-    if initial is 'SD':
+    if initial == 'SD':
         return 'San Diego Chargers'
-    if initial is 'DAL':
+    if initial == 'DAL':
         return 'Dallas Cowboys'
-    if initial is 'NYG':
+    if initial == 'NYG':
         return 'New York Giants'
-    if initial is 'PHI':
+    if initial == 'PHI':
         return 'Philadelphia Eagles'
-    if initial is 'WAS':
+    if initial == 'WAS':
         return 'Washington Redskins'
-    if initial is 'CHI':
+    if initial == 'CHI':
         return 'Chicago Bears'
-    if initial is 'DET':
+    if initial == 'DET':
         return 'Detroit Lions'
-    if initial is 'GB':
+    if initial == 'GB':
         return 'Green Bay Packers'
-    if initial is 'MIN':
+    if initial == 'MIN':
         return 'Minnesota Vikings'
-    if initial is 'ATL':
+    if initial == 'ATL':
         return 'Atlanta Falcons'
-    if initial is 'CAR':
+    if initial == 'CAR':
         return 'Carolina Panthers'
-    if initial is 'NO':
+    if initial == 'NO':
         return 'New Orleans Saints'
-    if initial is 'TB':
+    if initial == 'TB':
         return 'Tampa Bay Buccaneers'
-    if initial is 'ARI':
+    if initial == 'ARI':
         return 'Arizona Cardinals'
-    if initial is 'SEA':
+    if initial == 'SEA':
         return 'Seattle Seahawks'
-    if initial is 'SF':
+    if initial == 'SF':
         return 'San Francisco 49ers'
-    if initial is 'STL':
+    if initial == 'STL':
         return 'St. Louis Rams'
 
 """
@@ -127,10 +128,24 @@ def main():
                 break
     print("Finished addding teams")
     # Load data into Game table
-    # print("Inserting data into Game table")
-    # insert_query = "INSERT INTO Game (home_team, away_team, home_score, away_score, game_date)" \
-    # " VALUES(%(home)s, %(away)s, %(hs)s, %(as)s, %(date)s)"
-    # with open('datasets/weather_20131231.csv')
+    print("Inserting data into Game table")
+    insert_query = "INSERT INTO Game (home_team, away_team, home_score, away_score, game_date)" \
+    " VALUES(%(home)s, %(away)s, %(hscore)s, %(ascore)s, %(date)s)"
+    with open('datasets/weather_20131231.csv') as weather:
+        reader = csv.reader(weather, delimiter=',')
+        first = next(reader)
+        get_home = "SELECT id FROM Team WHERE name=%(name)s"
+        get_away = "SELECT id FROM Team WHERE name=%(name)s"
+        for row in reader:
+            date = datetime.strptime(row[10], '%m/%d/%Y')
+            if (date.year > 2002 and date.year < 2014) or (date.year == 2002 and date.month > 6) or \
+            (date.year == 2014 and date.month < 6):
+                cursor.execute(get_home, dict(name=row[1]))
+                home = cursor.fetchall()[0][0]
+                cursor.execute(get_away, dict(name=row[3]))
+                away = cursor.fetchall()[0][0]
+                cursor.execute(insert_query, dict(home=home, away=away, hscore=row[2], ascore=row[4], date=date))
+                conn.commit()
     # Load data into Weather table
 
     # Load data into Standings table
