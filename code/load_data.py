@@ -82,6 +82,8 @@ switching cities/names.
 """
 def main():
     # TODO invoke your code to load the data into the database
+    print("Creating Schema")
+    cursor.execute(open("schema.sql", "r").read())
     print("Loading data")
     # Load data into Conferences table
     print("Inserting data into conference table")
@@ -125,7 +127,10 @@ def main():
                 break
     print("Finished addding teams")
     # Load data into Game table
-
+    # print("Inserting data into Game table")
+    # insert_query = "INSERT INTO Game (home_team, away_team, home_score, away_score, game_date)" \
+    # " VALUES(%(home)s, %(away)s, %(hs)s, %(as)s, %(date)s)"
+    # with open('datasets/weather_20131231.csv')
     # Load data into Weather table
 
     # Load data into Standings table
