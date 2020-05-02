@@ -69,7 +69,6 @@ CREATE TABLE Playoffs
 (
   standings_id INTEGER REFERENCES Standings(id),
   seed INTEGER,
-  won_wc BOOLEAN, -- Won Wildcard
   won_div BOOLEAN, -- Won Division
   won_conf BOOLEAN, -- Won Conference
   won_sb BOOLEAN, -- Won Superbowl
